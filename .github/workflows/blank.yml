@@ -19,7 +19,7 @@ permissions:
   issues: write
   pull-requests: write
   id-token: write 
-  
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -35,6 +35,7 @@ jobs:
       - uses: cycjimmy/semantic-release-action@v4
         with:
           semantic_version: v21.1.1
+          branches: main
           extra_plugins: |
             @semantic-release/git
             @semantic-release/changelog
