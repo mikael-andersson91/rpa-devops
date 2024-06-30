@@ -32,6 +32,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
+      - id: create-config
+        run: |
+          configFile=".releasesrc.json"
+          echo '
+          {
+            "branches": ["master", "next"]
+          }          
+          ' >> $configFile
+          cat $configFile
+
       - uses: cycjimmy/semantic-release-action@v4
         with:
           semantic_version: v21.1.1
