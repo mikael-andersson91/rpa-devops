@@ -13,6 +13,7 @@ More specifically, the created site:
 
 To get started with creating a site, simply:
 
+
 1. click "[use this template]" to create a GitHub repository
 2. go to Settings > Pages > Build and deployment > Source, and select GitHub Actions
 
