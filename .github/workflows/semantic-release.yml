@@ -40,6 +40,29 @@ jobs:
           configFile=".releasesrc.json"
           echo '
           {
+            "plugins": [
+              [
+                "@semantic-release/commit-analyzer",
+                {
+                  "preset": "conventionalcommits",
+                  "releaseRules": [{"type": "chore", "release": "patch"}]
+                }
+              ],
+              [
+                "@semantic-release/release-notes-generator",
+                [
+                  "preset": "conventionalcommits"
+                ]
+              ],
+              "@semantic-release/changelog",
+              "@semantic-release/github",
+              [
+                "@semantic-release/git",
+                {
+                  "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
+                }
+              ]
+            ]
             "branches": ["master", "main"]
           }          
           ' >> $configFile
@@ -51,7 +74,9 @@ jobs:
           branches: |
             ["master", "main"]
           extra_plugins: |
+            @semantic-release/git
             @semantic-release/changelog
+            @semantic-release/exec
             conventional-changelog-conventionalcommits@6.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
