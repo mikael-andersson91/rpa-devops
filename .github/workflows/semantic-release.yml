@@ -37,7 +37,7 @@ jobs:
           configFile=".releasesrc.json"
           echo '
           {
-            "branches": ["master", "next"]
+            "branches": ["master", "main"]
           }          
           ' >> $configFile
           cat $configFile
