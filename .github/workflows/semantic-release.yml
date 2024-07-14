@@ -32,23 +32,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      - id: export-npm-token
-        run: echo "NPM_TOKEN=" >> $GITHUB_ENV
-
       - id: create-config
         run: |
           configFile=".releasesrc.json"
           echo '
           {
-            "branches": [
-              "+([0-9])?(.{+([0-9]),x}).x",
-              "main",
-              "master",
-              {
-                "name": "beta",
-                "prerelease": true
-              }
-            ],
+            "branches": ["main", "master"],
             "plugins": [
               "@semantic-release/commit-analyzer",
               "@semantic-release/release-notes-generator",
@@ -59,7 +48,5 @@ jobs:
           cat $configFile
 
       - uses: cycjimmy/semantic-release-action@v4
-        with:
-          branches: '["main", "master"]'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
