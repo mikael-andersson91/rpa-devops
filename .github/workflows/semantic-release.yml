@@ -37,7 +37,10 @@ jobs:
           configFile=".releasesrc.json"
           echo '
           {
-            "branches": ["main", "master"],
+            "branches": [
+              "master", 
+              "main"
+            ],
             "plugins": [
               "@semantic-release/commit-analyzer",
               "@semantic-release/release-notes-generator",
@@ -50,3 +53,9 @@ jobs:
       - uses: cycjimmy/semantic-release-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branches: '["main", "master"]'
+          extra_plugins: |
+            "@semantic-release/commit-analyzer"
+            "@semantic-release/release-notes-generator"
+            "@semantic-release/github"
