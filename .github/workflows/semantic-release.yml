@@ -29,38 +29,98 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Slugify github variables
+        uses: rlespinasse/github-slug-action@v4.5.0
+
       - id: create-config
         run: |
           configFile=".releasesrc.json"
           echo '
           {
-            "branches": [
-              "master", 
-              "main"
-            ],
             "plugins": [
-              "@semantic-release/commit-analyzer",
-              "@semantic-release/release-notes-generator",
+              [
+                "@semantic-release/commit-analyzer",
+                {
+                  "preset": "conventionalcommits",
+                  "releaseRules": [{"type": "chore", "release": "patch"}]
+                }
+              ],
+              [
+                "@semantic-release/release-notes-generator",
+                {
+                  "preset": "conventionalcommits",
+                  "presetConfig": {
+                    "issuePrefixes": ["#[0-9]{1,1000}"],
+                    "issueUrlFormat": "https://github.com/mikael-andersson91/rpa-devops/issues/{{prefix}}{{id}}",
+                    "types": [
+                      {
+                        "type": "feat",
+                        "section": ":sparkles: New Features",
+                        "hidden": false
+                      },
+                      {
+                        "type": "fix",
+                        "section": ":bug: Bug Fixes",
+                        "hidden": false
+                      },
+                      {
+                        "type": "docs",
+                        "section": ":memo: Documentation",
+                        "hidden": true
+                      },
+                      {
+                        "type": "refactor",
+                        "section": ":zap: Refactor",
+                        "hidden": true
+                      },
+                      {
+                        "type": "perf",
+                        "section": ":fast_forward: Performance",
+                        "hidden": false
+                      },
+                      {
+                        "type": "test",
+                        "section": ":white_check_mark: Tests",
+                        "hidden": true
+                      },
+                      {
+                        "type": "ci",
+                        "section": ":repeat: CI",
+                        "hidden": true
+                      },
+                      {
+                        "type": "chore",
+                        "section": ":package: Maintenance",
+                        "hidden": false
+                      }
+                    ]
+                  }
+                }
+              ],
+              "@semantic-release/changelog",
               "@semantic-release/github",
               [
-                "@semantic-release/exec",
+                "@semantic-release/git",
                 {
-                  "prepareCmd": "set-version ${nextRelease.version}",
-                  "publishCmd": "publish-package"
+                  "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
                 }
               ]
-            ]
+            ],
+            "branches": ["main", "master"]
           }       
           ' >> $configFile
           cat $configFile
 
-      - uses: cycjimmy/semantic-release-action@v4
+      - name: Semantic Release
+        id: semantic-release
+        uses: cycjimmy/semantic-release-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          branches: '["main", "master"]'
+          semantic_version: v21.1.1
+          branches: main
           extra_plugins: |
-            "@semantic-release/commit-analyzer"
-            "@semantic-release/release-notes-generator"
-            "@semantic-release/github"¨
-            "@semantic-release/exec"
+            @semantic-release/git
+            @semantic-release/changelog
+            @semantic-release/exec
+            conventional-changelog-conventionalcommits@6.1.0
