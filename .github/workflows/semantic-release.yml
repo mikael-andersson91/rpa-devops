@@ -1,18 +1,38 @@
-# Workflow for creating releases
+# Workflow for creating releases with Semantic Release, provides a default configuration
 
 name: Semantic Release
 
-# Controls when the workflow will run
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
   # Allows the workflow to be reused in other repositories
   workflow_call:
+    inputs: 
+      issue-url-format:
+        type: string
+        default: "https://github.com/${{ github.repository }}/issues/{{id}}"
+        description: "URL format for issues in changelog."
+        required: false
+      issue-prefixes:
+        type: string
+        default: "#"
+        description: "Prefix to identify references to issues in commit message."
+      dry-run:
+        type: boolean
+        default: false
+        description: "Whether to run in dry-run mode, mainly for testing."
+    secrets:
+      PAT:
+        required: false
+        description: A GitHub PAT used for publishing releases (required for commits to CHANGELOG.md)
+    outputs:
+      release-notes:
+        description: "The release notes for the new release"
+        value: ${{ jobs.semantic-release.outputs.release-notes }}
+      release-version:
+        description: "The new release version"
+        value: ${{ jobs.semantic-release.outputs.release-version }}
+      release-published:
+        description: "Whether a release was created"
+        value: ${{ jobs.semantic-release.outputs.release-published }}
     
 permissions:
   actions: read
@@ -21,16 +41,18 @@ permissions:
   pull-requests: write
   id-token: write 
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   semantic-release:
+    outputs:
+      release-notes: ${{ steps.semantic-release.outputs.new_release_notes }}
+      release-version: ${{ steps.semantic-release.outputs.new_release_version }}
+      release-published: ${{ steps.semantic-release.outputs.new_release_published }}
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Slugify github variables
-        uses: rlespinasse/github-slug-action@v4.5.0
+        with:
+          fetch-depth: 0
 
       - id: create-config
         run: |
@@ -50,49 +72,17 @@ jobs:
                 {
                   "preset": "conventionalcommits",
                   "presetConfig": {
-                    "issuePrefixes": ["#[0-9]{1,1000}"],
-                    "issueUrlFormat": "https://github.com/mikael-andersson91/rpa-devops/issues/{{prefix}}{{id}}",
+                    "issue-prefixes": ["${{ inputs.issue-prefixes}}"],
+                    "issue-url-format": "${{ inputs.issue-url-format }}",
                     "types": [
-                      {
-                        "type": "feat",
-                        "section": ":sparkles: New Features",
-                        "hidden": false
-                      },
-                      {
-                        "type": "fix",
-                        "section": ":bug: Bug Fixes",
-                        "hidden": false
-                      },
-                      {
-                        "type": "docs",
-                        "section": ":memo: Documentation",
-                        "hidden": true
-                      },
-                      {
-                        "type": "refactor",
-                        "section": ":zap: Refactor",
-                        "hidden": true
-                      },
-                      {
-                        "type": "perf",
-                        "section": ":fast_forward: Performance",
-                        "hidden": false
-                      },
-                      {
-                        "type": "test",
-                        "section": ":white_check_mark: Tests",
-                        "hidden": true
-                      },
-                      {
-                        "type": "ci",
-                        "section": ":repeat: CI",
-                        "hidden": true
-                      },
-                      {
-                        "type": "chore",
-                        "section": ":package: Maintenance",
-                        "hidden": false
-                      }
+                      {"type": "feat", "section": "Features"},
+                      {"type": "fix", "section": "Bug Fixes"},
+                      {"type": "chore", "section": "Maintenance", "hidden": false},
+                      {"type": "docs", "section": "Documentation", "hidden": true},
+                      {"type": "style", "hidden": true},
+                      {"type": "refactor", "hidden": true},
+                      {"type": "perf", "hidden": true},
+                      {"type": "test", "hidden": true}
                     ]
                   }
                 }
@@ -115,10 +105,10 @@ jobs:
         id: semantic-release
         uses: cycjimmy/semantic-release-action@v4
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT != '' && secrets.PAT || secrets.GITHUB_TOKEN }}
         with:
           semantic_version: v21.1.1
-          branches: main
+          dry_run: ${{ inputs.dry-run }}
           extra_plugins: |
             @semantic-release/git
             @semantic-release/changelog
