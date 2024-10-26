@@ -1,0 +1,17 @@
+name: Create Release for the Repository
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    release:
+        uses: ./.github/workflows/_semantic-release.yml
+        with:
+            dry-run: ${{ github.event_name == 'pull_request' }}
+        secrets:
+            PAT: ${{ secrets.PAT }}
