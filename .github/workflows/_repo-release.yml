@@ -10,7 +10,7 @@ on:
 
 jobs:
     release:
-        uses: ./.github/workflows/_semantic-release.yml
+        uses: ./.github/workflows/semantic-release.yml
         with:
             dry-run: ${{ github.event_name == 'pull_request' }}
         secrets:
