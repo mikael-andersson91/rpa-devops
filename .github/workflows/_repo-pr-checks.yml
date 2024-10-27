@@ -1,0 +1,10 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+    commitsar:
+        uses: ./.github/workflows/commitsar.yml
