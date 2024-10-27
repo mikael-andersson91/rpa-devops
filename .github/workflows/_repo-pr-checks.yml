@@ -1,0 +1,25 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+    commitsar:
+        uses: ./.github/workflows/commitsar.yml
+ 
+    greeting:
+        runs-on: ubuntu-latest
+        permissions:
+            pull-requests: write
+        steps:
+          - uses: actions/first-interaction@v1
+            with:
+              repo-token: ${{ secrets.GITHUB_TOKEN }}
+              pr-message: | 
+                "
+                Hello, thank you for your contribution to this project! 🎉
+                
+                We will review your pull request as soon as possible, meanwhile, please read the [Contribution guidelines](CONTRIBUTING.md) to ensure your PR meets the project's standards.
+                "

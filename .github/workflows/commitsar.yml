@@ -1,0 +1,37 @@
+# Workflow for checking commit messages and PR titles for compliance with conventional commits standard
+
+name: Commitsar
+on: 
+    workflow_call:
+
+jobs:
+  commitsar:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+            ref: ${{ github.event.pull_request.head.sha }}
+
+        - id: generate-config
+          name: Generate Configuration
+          run: |
+            configFile="./.commitsar.yaml"
+            echo "Creating default configuration..."
+            echo '
+            version: 1
+            verbose: true
+            commits:
+                strict: true
+                disabled: false
+            pull_request:
+                conventional: true
+            ' > $configFile
+            cat $configFile
+    
+        - id: commitsar
+          name: Commitsar
+          uses: aevea/commitsar@v0.20.2
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            COMMITSAR_CONFIG_PATH: ./
