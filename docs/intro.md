@@ -23,3 +23,21 @@ You can add an image or a code block, too.
 ```
 
 </details>
+
+<details>
+<summary>Mermaid test</summary>
+
+### Some Mermaid
+
+You can add text within a collapsed section. 
+
+You can add an image or a code block, too.
+
+```mermaid
+graph TD;
+  A-->B;
+  B-->C;
+  C-->D;
+```
+
+</details>
