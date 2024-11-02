@@ -3,8 +3,8 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'The RPA DevOps Corner',
+  tagline: 'DevOps for RPA Developers',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
