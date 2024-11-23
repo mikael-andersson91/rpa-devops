@@ -1,0 +1,9 @@
+{
+    "label": "Reusable Workflows",
+    "position": 4,
+    "link": {
+      "type": "generated-index",
+      "description": "Reusable workflows for GitHub Actions."
+    }
+  }
+  
