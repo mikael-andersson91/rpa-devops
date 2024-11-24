@@ -1,0 +1,24 @@
+# This is a sample workflow file for testing the reusable UiPath Pack workflow
+name: Test UiPath Pack
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+    test-uipath-pack:
+      name: Test UiPath Pack
+      uses: ./.github/workflows/uipath-pack.yml
+      with:
+        project-file-paths: test-data/UiPathSampleProject/project.json
+        organization-id: hppcntv
+        orchestrator-tenant: Mikaels-RnD
+        orchestrator-folder: Shared
+      secrets:
+        ORCHESTRATOR_APP_ID: ${{ secrets.ORCHESTRATOR_APP_ID }}
+        ORCHESTRATOR_APP_SECRET: ${{ secrets.ORCHESTRATOR_APP_SECRET }}
