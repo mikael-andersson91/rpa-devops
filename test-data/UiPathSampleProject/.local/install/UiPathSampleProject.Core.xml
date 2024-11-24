@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>UiPathSampleProject.Core</name>
+    </assembly>
+    <members>
+        <member name="M:UiPathSampleProject.WorkflowRunnerService.Main">
+            <summary>
+            Invokes the Main.xaml
+            </summary>
+        </member>
+        <member name="M:UiPathSampleProject.WorkflowRunnerService.Main(System.Boolean)">
+            <summary>
+            Invokes the Main.xaml
+            </summary>
+            <param name="isolated">Indicates whether to isolate executions (run them within a different process)</param>
+        </member>
+        <member name="M:UiPathSampleProject.WorkflowRunnerService.MainTestCase">
+            <summary>
+            Invokes the MainTestCase.xaml
+            </summary>
+        </member>
+        <member name="M:UiPathSampleProject.WorkflowRunnerService.MainTestCase(System.Boolean)">
+            <summary>
+            Invokes the MainTestCase.xaml
+            </summary>
+            <param name="isolated">Indicates whether to isolate executions (run them within a different process)</param>
+        </member>
+    </members>
+</doc>
