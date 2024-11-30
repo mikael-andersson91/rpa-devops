@@ -1,29 +1,9 @@
 ---
-workflow: '.github/workflows/semantic-release.yml'
+workflow: 'semantic-release.yml'
 ---
 
-import CodeBlock from '@theme/CodeBlock';
-import SemanticReleaseWorkflow from '!!raw-loader!@site/.github/workflows/semantic-release.yml';
+import GitHubActionsWorkflow from "@site/src/components/GitHubActionsWorkflow/GitHubActionsWorkflow.mdx"
 
 # Semantic Release
 
-## Workflow details 
-
-### Inputs
-
-### Secrets
-
-### Outputs
-
-### Workflow file
-
-<details>
-    <summary>Click to view the workflow file</summary>
-        <CodeBlock 
-          language="yml"
-          title={frontMatter.workflow}
-          showLineNumbers={true}
-        >
-            {SemanticReleaseWorkflow}
-        </CodeBlock>
-</details>
+<GitHubActionsWorkflow workflow={frontMatter.workflow} />
