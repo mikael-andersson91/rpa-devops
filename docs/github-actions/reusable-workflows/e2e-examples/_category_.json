@@ -1,0 +1,9 @@
+{
+    "label": "End to End Examples",
+    "position": 10,
+    "link": {
+      "type": "generated-index",
+      "description": "Examples of combining reusable workflows in GitHub Actions for CI purposes suiting multiple types of team workflows"
+    }
+  }
+  

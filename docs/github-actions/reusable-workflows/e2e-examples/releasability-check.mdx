@@ -1,0 +1,36 @@
+---
+title: Releasability Checks (Placeholder page)
+---
+
+Combines testing, workflow analysis, packing and commit checks to verify that the version available on the triggered branch is ready for release.
+
+Optionally, this workflow can be configured to actually create releases at the end if run on events that are not pull requests.
+
+```mermaid
+---
+title: UiPath Releasability Checks
+---
+flowchart LR
+    pack[UiPath Pack]
+    analyze[UiPath Analyze]
+    test[UiPath Test]
+    commitsar[Commitsar]
+    semantic-release[Semantic Release]
+    all-checks-passed{All checks passed?}
+    dry-run{Dry run or pull request?}
+    release-created[Release Created]
+    no-release[No release]
+    e[End]
+
+    pack-->all-checks-passed
+    analyze-->all-checks-passed
+    test-->all-checks-passed
+    commitsar-->all-checks-passed
+    all-checks-passed-->semantic-release
+    semantic-release-->dry-run
+    dry-run--"No"-->release-created
+    dry-run--"Yes"-->no-release
+    all-checks-passed--"No"-->e
+    release-created-->e
+    no-release-->e
+```
